@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import { Collection } from "@/components/shared/Collection"
 import { navLinks } from "@/constants"
 import { getAllImages } from "@/lib/actions/image.actions"
@@ -33,12 +34,14 @@ const Home = async ({ searchParams }: SearchParamProps) => {
       </section>
 
       <section className="sm:mt-12">
-        <Collection 
-          hasSearch={true}
-          images={images?.data}
-          totalPages={images?.totalPage}
-          page={page}
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Collection 
+            hasSearch={true}
+            images={images?.data}
+            totalPages={images?.totalPage}
+            page={page}
+          />
+        </Suspense>
       </section>
     </>
   )
