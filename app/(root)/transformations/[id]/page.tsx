@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 import Header from "@/components/shared/Header";
 import TransformedImage from "@/components/shared/TransformedImage";
@@ -13,6 +14,10 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
   const { userId } = await auth();
 
   const image = await getImageById(id);
+
+  if (!image) {
+    notFound();
+  }
 
   return (
     <>

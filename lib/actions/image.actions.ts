@@ -84,11 +84,15 @@ export async function getImageById(imageId: string) {
 
     const image = await populateUser(Image.findById(imageId));
 
-    if(!image) throw new Error("Image not found");
+    if(!image) {
+      console.error("Image not found:", imageId);
+      return null;
+    }
 
     return JSON.parse(JSON.stringify(image));
   } catch (error) {
-    handleError(error)
+    console.error("Error fetching image:", error);
+    return null;
   }
 }
 
@@ -146,7 +150,12 @@ export async function getAllImages({ limit = 9, page = 1, searchQuery = '' }: {
       savedImages,
     }
   } catch (error) {
-    handleError(error)
+    console.error("Error fetching all images:", error);
+    return {
+      data: [],
+      totalPage: 0,
+      savedImages: 0
+    }
   }
 }
 
@@ -177,6 +186,10 @@ export async function getUserImages({
       totalPages: Math.ceil(totalImages / limit),
     };
   } catch (error) {
-    handleError(error);
+    console.error("Error fetching user images:", error);
+    return {
+      data: [],
+      totalPages: 0
+    };
   }
 }
